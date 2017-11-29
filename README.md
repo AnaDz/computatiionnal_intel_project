@@ -1,0 +1,2 @@
+# computatiionnal_intel_project
+project of Computational intelligence UoGuelph
