@@ -50,8 +50,7 @@ if __name__ == '__main__':
 
     all_countries = data_process.region.value_counts().index
 
-    final_data =  pd.DataFrame({'region': np.nan, 'observationDateYear': np.nan, 'observationDateMonth': np.nan, 'disease': np.nan, 'sumCases': np.nan}, index = [0])
-    print final_data
+    final_data =  pd.DataFrame()
         
     for disease in all_diseases:
         one_disease_table = data_process.loc[data_process['disease'] == disease]
@@ -77,10 +76,21 @@ if __name__ == '__main__':
                                      'sumCases': number_cases},index=[len(final_data)]), ignore_index = True)
 
     #print final_data
-    final_data = final_data.dropna()
-    final_data = final_data.reset_index()
-    train_y = final_data[:,5:]
-    print train_y
+    label = final_data.ix[:,5:]
+    train_data = final_data.ix[:,:4]
+    test_X = []
 
+    train_X = train_data[:140]
+    train_y = label[:140]
+    valid_X = train_data[140:]
+    valid_y = label[140:]
     
-    
+    data_for_MLP = (
+        (train_X, train_y),
+        (valid_X, valid_y),
+        (test_X,),
+    )
+    data_file = "preprocessed_data.pkl"
+    print "...saving data pickle: %s" % data_file
+    with open(data_file, 'wb') as f:
+        pickle.dump(data_for_MLP, f)
