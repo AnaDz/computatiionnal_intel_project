@@ -43,13 +43,24 @@ if __name__ == '__main__':
         print data_process
 
     else:
-         data_process = pd.read_csv('good_data.csv')
+        data_process = pd.read_csv('good_data.csv')
 
+    
+    dict_country = dict()
+    dict_disease = dict()
     #most_common_diseases = data.disease.index
     all_diseases = data_process.disease.value_counts().index
+    index = 1
+    for disease in all_diseases:
+        dict_disease[disease] = index
+        index = index + 1
 
     all_countries = data_process.region.value_counts().index
-
+    index = 1
+    for country in all_countries:
+        dict_country[country] = index
+        index = index + 1
+    
     final_data =  pd.DataFrame()
         
     for disease in all_diseases:
@@ -69,14 +80,15 @@ if __name__ == '__main__':
                             if len(case_in_month) != 0:        
                                 number_cases = case_in_month.sumCases.sum()
                                 
-                                final_data = final_data.append( pd.DataFrame({'region':country,
+                                final_data = final_data.append( pd.DataFrame({'region':dict_country[country],
                                      'observationDateYear': year,
                                      'observationDateMonth': month,
-                                     'disease': disease,
+                                     'disease': dict_disease[disease],
                                      'sumCases': number_cases},index=[len(final_data)]), ignore_index = True)
 
     #print final_data
-    label = final_data.ix[:,5:]
+    label = final_data.ix[:,4]
+    print label
     train_data = final_data.ix[:,:4]
     test_X = []
 
