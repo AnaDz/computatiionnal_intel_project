@@ -86,9 +86,11 @@ if __name__ == '__main__':
                                      'disease': dict_disease[disease],
                                      'sumCases': number_cases},index=[len(final_data)]), ignore_index = True)
 
-    #print final_data
+
+
+    final_data = final_data.sample(frac=1)
+    
     label = final_data.ix[:,4]
-    print label
     train_data = final_data.ix[:,:4]
     test_X = []
 
