@@ -17,6 +17,7 @@ if __name__ == '__main__':
     data = data.reset_index()
     data = data.drop(columns=['index'])
 
+    # Tranformation of the observationDate to a month and a year
     first_date = datetime.datetime.strptime(data.loc[0,'observationDate'], "%d/%m/%Y")
     data_process = pd.DataFrame({'region':data.loc[0,'region'],
                                  'observationDateYear': first_date.year,
@@ -33,6 +34,7 @@ if __name__ == '__main__':
                                                              'sumCases': data.loc[i,'sumCases']},index=[i]), ignore_index = True)
         
 
+    # The dictionnaries allows to transform a country and a disease to an id number.
     dict_country = dict()
     dict_disease = dict()
     #most_common_diseases = data.disease.index
@@ -47,9 +49,11 @@ if __name__ == '__main__':
     for country in all_countries:
         dict_country[country] = index
         index = index + 1
-        
+
+    # Empty DataFrame
     final_data =  pd.DataFrame()
-    
+
+    # Filling DataFrame
     for disease in all_diseases:
         one_disease_table = data_process.loc[data_process['disease'] == disease]
         for country in all_countries:
@@ -81,9 +85,10 @@ if __name__ == '__main__':
     train_data = final_data.ix[:,:4]
     test_X = []
 
-    train_X = train_data[:140]
+    # separation of data
+    train_X = train_data[:140] #80%
     train_y = label[:140]
-    valid_X = train_data[140:]
+    valid_X = train_data[140:]#20%
     valid_y = label[140:]
     
     data_for_MLP = (
